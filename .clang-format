@@ -1,0 +1,65 @@
+# timer_sched / linkedList 项目 clang-format 配置
+# 用法: clang-format -i <file>
+#
+# ======== clang-format 能自动执行 ========
+#  缩进/括号/空格/对齐/指针位置/行宽
+#
+# ======== 以下规则需人工检查 ========
+#  Yoda 条件       (0 == var, NULL == ptr)
+#  } 后空行        (大括号结束和下一行代码之间)
+#  语句-block间空行  (赋值/调用 和 if/for/while 之间)
+#  变量在函数顶部   (编译器 -Wdeclaration-after-statement 可辅助)
+#  int/char→int32_t/uint8_t (定宽类型)
+#  static 内部函数
+#  复合条件加括号   ((NULL == a) || (NULL == b))
+#  Doxygen 参数方向  @param[in] / @param[out] / @param[inout]
+#  sizeof 类型名    sizeof(LIST_HEAD) 非 sizeof(*head)
+#  void 函数 return;
+#  结构体 4 字节对齐  成员大→小排列, 不足补 _res
+
+BasedOnStyle:    LLVM
+
+# 缩进: 4空格，不用Tab
+IndentWidth:     4
+UseTab:          Never
+TabWidth:        4
+
+# 括号风格: Allman (左大括号独占一行)
+BreakBeforeBraces: Allman
+
+# 行宽
+ColumnLimit:     80
+
+# 指针/引用: * 贴近变量名 (void *ptr)
+PointerAlignment: Right
+
+# 空格
+SpaceAfterCStyleCast:  true           # (type *)ptr
+SpaceBeforeParens:      ControlStatements  # if (cond), while (cond)
+SpaceInEmptyParentheses: false
+SpacesInParentheses:    false           # 括号内不加空格
+
+# 对齐
+AlignConsecutiveDeclarations:  Consecutive    # 自动对齐连续声明（结构体成员等）
+AlignConsecutiveAssignments:   false
+AlignConsecutiveMacros:        true
+
+# 头文件排序
+SortIncludes: false             # 手动控制 include 顺序
+
+# 注释
+ReflowComments: false            # 不自动重排注释
+
+# 函数/控制流
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine:   false
+
+# 二元运算符换行: 换行后运算符在新行行首
+BreakBeforeBinaryOperators: All
+
+# case 缩进: case 比 switch 多缩进一级
+IndentCaseLabels: true
+
+# extern "C" 块内不缩进
+IndentExternBlock: NoIndent
