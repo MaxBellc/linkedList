@@ -2,8 +2,10 @@ cmake_minimum_required(VERSION 3.10)
 project(linkedList VERSION 1.0.0 LANGUAGES C)
 
 #===========================================================================
-# 库: liblinkedlist (静态库)
+# 库: liblinkedlist (静态库 + 动态库)
 #===========================================================================
+
+# 静态库
 add_library(linkedlist STATIC
     src/list.c
 )
@@ -17,6 +19,27 @@ target_compile_options(linkedlist PRIVATE
     -Wdeclaration-after-statement
     -O2
     -std=c11
+)
+
+# 动态库
+add_library(linkedlist_shared SHARED
+    src/list.c
+)
+
+set_target_properties(linkedlist_shared PROPERTIES
+    OUTPUT_NAME linkedlist
+)
+
+target_include_directories(linkedlist_shared PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+target_compile_options(linkedlist_shared PRIVATE
+    -Wall -Wextra -Werror
+    -Wdeclaration-after-statement
+    -O2
+    -std=c11
+    -fPIC
 )
 
 #===========================================================================
@@ -46,8 +69,9 @@ target_compile_options(test_list PRIVATE
 #===========================================================================
 # 安装规则
 #===========================================================================
-install(TARGETS linkedlist
+install(TARGETS linkedlist linkedlist_shared
     ARCHIVE DESTINATION lib
+    LIBRARY DESTINATION lib
 )
 install(DIRECTORY include/
     DESTINATION include
