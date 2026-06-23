@@ -43,7 +43,8 @@ size_t     list_count(const LIST_HEAD *head);
 int32_t    list_empty(const LIST_HEAD *head);
 
 // 遍历
-list_for_each(data_ptr, head) { ... }
+LIST_NODE *n = head->first;
+while (NULL != n) { data = n->data; ... n = n->next; }
 
 // 清空
 void list_clear(LIST_HEAD *head);
@@ -60,10 +61,13 @@ sensor_t b = {2, 26.5};
 list_push_back(list, &a);
 list_push_back(list, &b);
 
-sensor_t *s = NULL;
-list_for_each(s, list)
+LIST_NODE *n = list->first;
+
+while (NULL != n)
 {
+    sensor_t *s = (sensor_t *) n->data;
     printf("sensor %d: %.1f\n", s->id, s->temp);
+    n = n->next;
 }
 
 list_destroy(list);

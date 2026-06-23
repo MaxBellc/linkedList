@@ -149,13 +149,15 @@ int32_t list_empty(const LIST_HEAD *head);
 /**
  * @brief 遍历链表
  *
- * @param pos  循环变量，每次迭代指向当前节点的 data
- * @param head 链表头指针
+ * 手动遍历:
+ * @code
+ *   LIST_NODE *n = list->first;
+ *   while (NULL != n) {
+ *       data = n->data;
+ *       n = n->next;
+ *   }
+ * @endcode
  */
-#define list_for_each(pos, head) \
-    for (LIST_NODE *_n = (head)->first; \
-         (NULL != _n) && ((pos) = _n->data, 1); \
-         _n = _n->next)
 
 /**
  * @brief 清空链表 —— 释放所有节点
@@ -200,20 +202,27 @@ list_push_back(list, &a);
 list_push_back(list, &b);
 
 /* 遍历 */
-sensor_t *s = NULL;
-list_for_each(s, list)
+LIST_NODE *n = list->first;
+
+while (NULL != n)
 {
+    sensor_t *s = (sensor_t *) n->data;
     printf("sensor %d\n", s->id);
+    n = n->next;
 }
 
-/* 查找 + 删除 —— 遍历中 _n 指向当前 LIST_NODE */
-list_for_each(s, list)
+/* 查找 + 删除 */
+n = list->first;
+
+while (NULL != n)
 {
+    sensor_t *s = (sensor_t *) n->data;
     if (0 == s->id)
     {
-        list_remove(list, _n);
+        list_remove(list, n);
         break;
     }
+    n = n->next;
 }
 
 list_destroy(list);

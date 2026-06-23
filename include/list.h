@@ -136,25 +136,6 @@ int32_t list_empty(const LIST_HEAD *head);
  *===========================================================================*/
 
 /**
- * @brief 遍历链表
- *
- * 用法:
- * @code
- *   sensor_t *s = NULL;
- *   list_for_each(s, head)
- *   {
- *       printf("sensor %d\n", s->id);
- *   }
- * @endcode
- *
- * @param pos  循环变量，每次迭代指向当前节点的 data
- * @param head 链表头指针
- */
-#define list_for_each(pos, head)                                               \
-    for (LIST_NODE *_n = (head)->first; (NULL != _n) && ((pos) = _n->data, 1); \
-         _n = _n->next)
-
-/**
  * @brief 清空链表 —— 释放所有节点
  *
  * 不会释放 data 指向的用户数据。

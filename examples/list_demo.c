@@ -54,20 +54,28 @@ int32_t main(void)
 
     /* 遍历 */
     printf("遍历:\n");
-    list_for_each(s, list)
+    LIST_NODE *n = list->first;
+
+    while (NULL != n)
     {
+        s = (SENSOR *) n->data;
         printf("  sensor %d: %.1f C\n", s->id, s->temp);
+        n = n->next;
     }
 
     /* 查找 + 删除 */
     printf("\n删除 id=2...\n");
-    list_for_each(s, list)
+    n = list->first;
+
+    while (NULL != n)
     {
-        if (0 == s->id)
+        s = (SENSOR *) n->data;
+        if (2 == s->id)
         {
-            list_remove(list, _n);
+            list_remove(list, n);
             break;
         }
+        n = n->next;
     }
 
     printf("删除后: count=%zu\n", list_count(list));

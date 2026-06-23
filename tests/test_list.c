@@ -79,6 +79,8 @@ static void test_push_back_multiple(void)
     TEST_ITEM  c = {3, 3.0};
     LIST_HEAD *head = list_create();
     TEST_ITEM *item = NULL;
+    LIST_NODE *n = NULL;
+    int32_t    expected = 1;
 
     list_push_back(head, &a);
     list_push_back(head, &b);
@@ -87,11 +89,14 @@ static void test_push_back_multiple(void)
     TEST_ASSERT_EQUAL(3, list_count(head));
 
     /* 验证遍历顺序 = 插入顺序 */
-    int32_t expected = 1;
-    list_for_each(item, head)
+    n = head->first;
+
+    while (NULL != n)
     {
+        item = (TEST_ITEM *) n->data;
         TEST_ASSERT_EQUAL(expected, item->id);
         expected++;
+        n = n->next;
     }
 
     list_destroy(head);
@@ -179,18 +184,23 @@ static void test_for_each_find_remove(void)
     TEST_ITEM  c = {3, 3.0};
     LIST_HEAD *head = list_create();
     TEST_ITEM *item = NULL;
+    LIST_NODE *n = NULL;
 
     list_push_back(head, &a);
     list_push_back(head, &b);
     list_push_back(head, &c);
 
-    list_for_each(item, head)
+    n = head->first;
+
+    while (NULL != n)
     {
+        item = (TEST_ITEM *) n->data;
         if (2 == item->id)
         {
-            list_remove(head, _n);
+            list_remove(head, n);
             break;
         }
+        n = n->next;
     }
 
     TEST_ASSERT_EQUAL(2, list_count(head));
